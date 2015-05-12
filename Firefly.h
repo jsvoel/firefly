@@ -14,8 +14,11 @@
 #include "RouteStrategy.h"
 #include "Waypoint.h"
 #include "LocationData.h"
+#include "Comport.h"
 
-#define MOCKUP // instead of using real data, use mock data for testing the interface 
+#define MOCKUP // instead of using real data, use mock data for testing the interface
+#define COMPORT "/dev/ttyS3" // the port were the serial is to be opened
+#define BAUDRATE B57600 // the baud rate it shall be set to
 
 class Firefly {
 public:
@@ -37,6 +40,7 @@ private:
     
     static Firefly *instance_;
     
+    Comport comport_;
     RouteStrategy *strategy_;
     std::vector<Waypoint*> waypoints_;
 };
