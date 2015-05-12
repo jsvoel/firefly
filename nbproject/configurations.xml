@@ -58,13 +58,15 @@
       </item>
       <item path="Firefly.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="GPSCommand.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="GPSCommand.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GPSData.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="LLPCommand.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LLPCommand.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="LocationData.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="LocationData.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RouteStrategy.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -109,13 +111,15 @@
       </item>
       <item path="Firefly.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="GPSCommand.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="GPSCommand.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GPSData.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="LLPCommand.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LLPCommand.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="LocationData.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="LocationData.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RouteStrategy.cpp" ex="false" tool="1" flavor2="0">
       </item>

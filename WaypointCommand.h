@@ -16,6 +16,9 @@ public:
     WaypointCommand(Comport* comport);
     WaypointCommand(const WaypointCommand& orig);
     virtual ~WaypointCommand();
+    
+    bool execute();
+    void setCoordinates(int latitude, int longitude, int height, int yaw, bool isAbsolute = true);
 private:
     Waypoint wp_;
 };

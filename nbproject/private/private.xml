@@ -7,13 +7,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/LLPCommand.h</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/Firefly.cpp</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/main.cpp</file>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/Comport.h</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/LocationData.h</file>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/WaypointCommand.h</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/Firefly.h</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/Waypoint.cpp</file>
-            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/LocationData.cpp</file>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/WaypointCommand.cpp</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/Waypoint.h</file>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/LLPCommand.cpp</file>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/Comport.cpp</file>
+            <file>file:/home/johannes/OneDrive/Netbeans/Firefly/LocationData.cpp</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/RouteStrategy.cpp</file>
             <file>file:/home/johannes/OneDrive/Netbeans/Firefly/RouteStrategy.h</file>
         </group>

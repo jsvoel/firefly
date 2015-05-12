@@ -42,9 +42,13 @@ void Comport::close() {
 
 bool Comport::write(const char* buffer, int size) {
     bool ret = false;
-    int written = write(filed_, buffer, size);
-    fsync(filed_);
-    if (written == size) {
+    if (size != 0) {
+        int written = write(filed_, buffer, size);
+        fsync(filed_);
+        if (written == size) {
+            ret = true;
+        }
+    } else {
         ret = true;
     }
     return ret;

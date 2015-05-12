@@ -8,16 +8,22 @@
 #ifndef WAYPOINT_H
 #define	WAYPOINT_H
 
+
+#define WPPROP_ABSCOORDS 0x01 //if set waypoint is interpreted as absolute coordinates, else relative coords
+#define WPPROP_HEIGHTENABLED 0x02  //set new height at waypoint
+#define WPPROP_YAWENABLED 0x04 //set new yaw-angle at waypoint(not yet implemented)
+#define WPPROP_AUTOMATICGOTO 0x10 //if set, vehicle will not wait for a goto command, but goto this waypoint directly
+#define WPPROP_CAM_TRIGGER 0x20 //if set, photo camera is triggered when waypoint is reached and time to stay is 80% up
+
 class Waypoint {
     friend class Firefly;
     friend class WaypointCommand;
 public:
     Waypoint(int latitude, int longitude, int height, int yaw);
     virtual ~Waypoint();
-
-private:
-    short getChecksum();
     
+    short getChecksum();
+private: 
     //always set to 1
     unsigned char wp_number_;
     //don't care
