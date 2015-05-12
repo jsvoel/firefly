@@ -19,7 +19,7 @@ Comport::Comport(const Comport& orig) {
 Comport::~Comport() {
 }
 
-bool Comport::open() {
+bool Comport::Open() {
     bool ret = false;
     // Initializing the Serial Port
     filed_ = open(port_, O_RDWR | O_NOCTTY | O_NDELAY | O_NONBLOCK);
@@ -36,11 +36,11 @@ bool Comport::open() {
     return ret;
 }
 
-void Comport::close() {
+void Comport::Close() {
     close(filed_);
 }
 
-bool Comport::write(const char* buffer, int size) {
+bool Comport::Write(const char* buffer, int size) {
     bool ret = false;
     if (size != 0) {
         int written = write(filed_, buffer, size);
@@ -54,7 +54,7 @@ bool Comport::write(const char* buffer, int size) {
     return ret;
 }
 
-int Comport::read(char* buffer, int size, int timeout, int retrycount) {
+int Comport::Read(char* buffer, int size, int timeout, int retrycount) {
     int remaining = size;
     int index = 0;
     timespec reqt, remt;

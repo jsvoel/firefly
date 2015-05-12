@@ -12,13 +12,11 @@ Firefly* Firefly::instance_ = 0;
 Firefly::Firefly()
 : comport_(COMPORT, BAUDRATE) {
     strategy_ = 0;
-    if (comport_.open() == false) {
+    if (comport_.Open() == false) {
         std::cout << "Couldn't open comport: " << COMPORT << std::endl;
     }
 }
 
-Firefly::Firefly(const Firefly& orig) {
-}
 
 Firefly::~Firefly() {
 }
@@ -66,6 +64,7 @@ void Firefly::pushWaypoint(Waypoint* wp) {
     waypoints_.push_back(wp);
 }
 
+/*
 void Firefly::getLocation(LocationData &data) {
 #ifdef MOCKUP
     data.latitude = 495222300; // Luisenplatz
@@ -76,3 +75,4 @@ void Firefly::getLocation(LocationData &data) {
     // actual sensor readings
 #endif
 }
+*/

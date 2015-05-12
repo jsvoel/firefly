@@ -15,7 +15,7 @@ class Comport;
 class LLPCommand {
 public:
     LLPCommand(Comport* comport, const char* description);
-    LLPCommand(const LLPCommand& orig);
+    
     virtual ~LLPCommand();
 
     virtual bool execute();

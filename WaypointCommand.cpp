@@ -10,7 +10,7 @@
 
 WaypointCommand::WaypointCommand(Comport* comport)
 : LLPCommand(comport, "Waypoint Command"),
-Waypoint(0, 0, 0, 0) {
+wp_(0, 0, 0, 0) {
     this->initiator_[0] = '>';
     this->initiator_[1] = '*';
     this->initiator_[2] = '>';
@@ -24,8 +24,6 @@ Waypoint(0, 0, 0, 0) {
     this->answersize_ = 5;
 }
 
-WaypointCommand::WaypointCommand(const WaypointCommand& orig) {
-}
 
 WaypointCommand::~WaypointCommand() {
 

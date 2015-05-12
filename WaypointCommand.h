@@ -14,7 +14,7 @@
 class WaypointCommand : public LLPCommand {
 public:
     WaypointCommand(Comport* comport);
-    WaypointCommand(const WaypointCommand& orig);
+   
     virtual ~WaypointCommand();
     
     bool execute();

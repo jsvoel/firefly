@@ -20,8 +20,8 @@ int main(int argc, char** argv) {
 
     timespec reqt, remt;
 
-    reqt.tv_sec = 0;
-    reqt.tv_nsec = 5000 * 1000 * 1000;
+    reqt.tv_sec = 5;
+    reqt.tv_nsec = 0;
 
     while (true) {
         gc.execute();

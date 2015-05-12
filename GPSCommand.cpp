@@ -21,8 +21,6 @@ GPSCommand::GPSCommand(Comport* comport)
     this->answerbuffer_ = (char*) &data_;
     this->answersize_ = sizeof(data_);
 }
-GPSCommand::GPSCommand(const GPSCommand& orig) {
-}
 
 GPSCommand::~GPSCommand() {
 }

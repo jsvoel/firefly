@@ -13,7 +13,6 @@
 
 #include "RouteStrategy.h"
 #include "Waypoint.h"
-#include "LocationData.h"
 #include "Comport.h"
 
 #define MOCKUP // instead of using real data, use mock data for testing the interface
@@ -33,10 +32,9 @@ public:
     void setRouteStrategy(RouteStrategy *rs); // set the RouteStrategy
     void pushWaypoint(Waypoint* wp); // put a Waypoint into the List
     
-    void getLocation(LocationData &data);
+    //void getLocation(LocationData &data);
 private:
     Firefly();
-    Firefly(const Firefly& orig);
     
     static Firefly *instance_;
     

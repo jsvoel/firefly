@@ -13,8 +13,6 @@ LLPCommand::LLPCommand(Comport* comport, const char* description) {
     pcom_ = comport;
 }
 
-LLPCommand::LLPCommand(const LLPCommand& orig) {
-}
 
 LLPCommand::~LLPCommand() {
 }
@@ -22,14 +20,14 @@ LLPCommand::~LLPCommand() {
 bool LLPCommand::execute() {
     bool ret = false;
     int answerbytes = 0;
-    if (this->pcom_->write(initiator_, initiatorsize_) == false) {
+    if (this->pcom_->Write(initiator_, initiatorsize_) == false) {
         std::cout << "Couldn't write command initiator: " << commanddescription_ << std::endl;
     } else {
-        if (pcom_->write(commandbuffer_, commandsize_) == false) {
+        if (pcom_->Write(commandbuffer_, commandsize_) == false) {
             std::cout << "Couldn't write command " << commanddescription_ << std::endl;
         } else {
             if (answersize_ > 0) {
-                answerbytes = pcom_->read(answerbuffer_, answersize_, 10, 10);
+                answerbytes = pcom_->Read(answerbuffer_, answersize_, 10, 10);
                 if (answerbytes != 0) {
                     answerbytes = answersize_ - answerbytes;
                     std::cout << "LLP Answer unexpected:" << std::endl;
