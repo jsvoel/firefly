@@ -10,6 +10,7 @@
 
 class Waypoint {
     friend class Firefly;
+    friend class WaypointCommand;
 public:
     Waypoint(int latitude, int longitude, int height, int yaw);
     virtual ~Waypoint();

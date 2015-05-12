@@ -50,7 +50,7 @@ bool Comport::write(const char* buffer, int size) {
     return ret;
 }
 
-int Comport::read(char* buffer, int size, int timeout) {
+int Comport::read(char* buffer, int size, int timeout, int retrycount) {
     int remaining = size;
     int index = 0;
     timespec reqt, remt;
@@ -59,11 +59,12 @@ int Comport::read(char* buffer, int size, int timeout) {
     reqt.tv_nsec = timeout * 1000 * 1000;
     nanosleep(&reqt, &remt);
 
-    while (remaining > 0) {
+    while (remaining > 0 && retrycount > -1) {
         index = read(filed_, &buffer[index], size - index);
         remaining -= index;
-        if (remaining > 0) {
+        if (remaining > 0 && retrycount > 0) {
             nanosleep(&reqt, &remt);
+            retrycount--;
         }
     }
     return remaining;

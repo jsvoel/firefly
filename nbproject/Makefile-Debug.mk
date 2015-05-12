@@ -35,10 +35,13 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Comport.o \
 	${OBJECTDIR}/Firefly.o \
+	${OBJECTDIR}/LLPCommand.o \
 	${OBJECTDIR}/LocationData.o \
 	${OBJECTDIR}/RouteStrategy.o \
 	${OBJECTDIR}/Waypoint.o \
+	${OBJECTDIR}/WaypointCommand.o \
 	${OBJECTDIR}/main.o
 
 
@@ -66,10 +69,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/firefly: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/firefly ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/Comport.o: Comport.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Comport.o Comport.cpp
+
 ${OBJECTDIR}/Firefly.o: Firefly.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Firefly.o Firefly.cpp
+
+${OBJECTDIR}/LLPCommand.o: LLPCommand.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LLPCommand.o LLPCommand.cpp
 
 ${OBJECTDIR}/LocationData.o: LocationData.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -85,6 +98,11 @@ ${OBJECTDIR}/Waypoint.o: Waypoint.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Waypoint.o Waypoint.cpp
+
+${OBJECTDIR}/WaypointCommand.o: WaypointCommand.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/WaypointCommand.o WaypointCommand.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
