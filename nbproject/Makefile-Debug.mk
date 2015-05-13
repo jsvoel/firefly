@@ -37,11 +37,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Comport.o \
 	${OBJECTDIR}/Firefly.o \
-	${OBJECTDIR}/GPSCommand.o \
-	${OBJECTDIR}/LLPCommand.o \
+	${OBJECTDIR}/NavigationCommand.o \
 	${OBJECTDIR}/RouteStrategy.o \
-	${OBJECTDIR}/Waypoint.o \
-	${OBJECTDIR}/WaypointCommand.o \
+	${OBJECTDIR}/SensorCommand.o \
 	${OBJECTDIR}/main.o
 
 
@@ -79,30 +77,20 @@ ${OBJECTDIR}/Firefly.o: Firefly.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Firefly.o Firefly.cpp
 
-${OBJECTDIR}/GPSCommand.o: GPSCommand.cpp 
+${OBJECTDIR}/NavigationCommand.o: NavigationCommand.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/GPSCommand.o GPSCommand.cpp
-
-${OBJECTDIR}/LLPCommand.o: LLPCommand.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LLPCommand.o LLPCommand.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/NavigationCommand.o NavigationCommand.cpp
 
 ${OBJECTDIR}/RouteStrategy.o: RouteStrategy.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RouteStrategy.o RouteStrategy.cpp
 
-${OBJECTDIR}/Waypoint.o: Waypoint.cpp 
+${OBJECTDIR}/SensorCommand.o: SensorCommand.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Waypoint.o Waypoint.cpp
-
-${OBJECTDIR}/WaypointCommand.o: WaypointCommand.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/WaypointCommand.o WaypointCommand.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SensorCommand.o SensorCommand.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

@@ -12,12 +12,13 @@
 #include <iostream>
 
 #include "RouteStrategy.h"
-#include "Waypoint.h"
 #include "Comport.h"
 
 #define MOCKUP // instead of using real data, use mock data for testing the interface
 #define COMPORT "/dev/ttyS3" // the port were the serial is to be opened
 #define BAUDRATE B57600 // the baud rate it shall be set to
+
+struct WAYPOINT;
 
 class Firefly {
 public:
@@ -30,9 +31,10 @@ public:
     
     void clearRoute(); // clear all waypoints and Strategy
     void setRouteStrategy(RouteStrategy *rs); // set the RouteStrategy
-    void pushWaypoint(Waypoint* wp); // put a Waypoint into the List
+    void pushWaypoint(WAYPOINT* wp); // put a Waypoint into the List
     
     //void getLocation(LocationData &data);
+    Comport* getComport();
 private:
     Firefly();
     
@@ -40,8 +42,11 @@ private:
     
     Comport comport_;
     RouteStrategy *strategy_;
-    std::vector<Waypoint*> waypoints_;
+    std::vector<WAYPOINT*> waypoints_;
 };
 
+inline Comport* Firefly::getComport(){
+    return &comport_;
+}
 #endif	/* FIREFLY_H */
 

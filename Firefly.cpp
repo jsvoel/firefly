@@ -6,6 +6,8 @@
  */
 
 #include "Firefly.h"
+#include "NavigationCommand.h"
+#include "SensorCommand.h"
 
 Firefly* Firefly::instance_ = 0;
 
@@ -33,8 +35,8 @@ Firefly* Firefly::getInstance() {
 
 void Firefly::start() {
     std::cout << "Fyling " << waypoints_.size() << " Waypoints:" << std::endl;
-    for (std::vector<Waypoint*>::iterator it(waypoints_.begin()); it != waypoints_.end(); ++it) {
-        std::cout << (*it)->latitude_ << " " << (*it)->longitude_ << std::endl;
+    for (std::vector<WAYPOINT*>::iterator it(waypoints_.begin()); it != waypoints_.end(); ++it) {
+        std::cout << (*it)->Y << " " << (*it)->X << std::endl;
     }
 }
 
@@ -47,7 +49,7 @@ void Firefly::clearRoute() {
         delete strategy_;
         strategy_ = 0;
     }
-    for (std::vector<Waypoint*>::iterator it(waypoints_.begin()); it != waypoints_.end(); ++it) {
+    for (std::vector<WAYPOINT*>::iterator it(waypoints_.begin()); it != waypoints_.end(); ++it) {
         delete *it;
     }
     waypoints_.clear();
@@ -60,7 +62,7 @@ void Firefly::setRouteStrategy(RouteStrategy *rs) {
     strategy_ = rs;
 }
 
-void Firefly::pushWaypoint(Waypoint* wp) {
+void Firefly::pushWaypoint(WAYPOINT* wp) {
     waypoints_.push_back(wp);
 }
 

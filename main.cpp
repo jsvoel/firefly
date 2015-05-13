@@ -8,15 +8,17 @@
 #include <time.h>
 
 #include "Firefly.h"
-#include "GPSCommand.h"
-
+#include "SensorCommand.h"
+#include "NavigationCommand.h"
 /*
  * 
  */
 int main(int argc, char** argv) {
-
-    Comport port(COMPORT, BAUDRATE);
-    GPSCommand gc(&port);
+    int count = 0;
+    GPSDataCommand gps;
+    LaunchCommand ln;
+    WaypointCommand wp;
+    EndCommand ed;
 
     timespec reqt, remt;
 
@@ -24,12 +26,30 @@ int main(int argc, char** argv) {
     reqt.tv_nsec = 0;
 
     while (true) {
-        gc.execute();
+        gps.execute();
 
-        std::cout << gc.getData().latitude << " " << gc.getData().longitude << " " << gc.getData().height << " " << gc.getData().heading << std::endl;
+        std::cout << gps.data.latitude << " " << gps.data.longitude << " " << gps.data.height << " " << gps.data.heading << std::endl;
         std::cout << "--------------------------------------------------------" << std::cout;
         nanosleep(&reqt, &remt);
+        count++;
+        if(count > 5){
+            break;
+        }
     }
+    
+    std::cout << "Launching..." << std::endl;
+    ln.execute();
+    nanosleep(&reqt, &remt);
+    
+    std::cout << "Flying 10 x 10 x 10" << std::endl;
+    wp.setRelative(10, 10, 10);
+    wp.execute();
+    nanosleep(&reqt, &remt);
+    
+    std::cout << "Ending..." << std::endl;
+    ed.execute();
+    nanosleep(&reqt, &remt);
+    
     return 0;
 }
 
