@@ -6,11 +6,9 @@
                    projectFiles="true">
       <itemPath>Comport.h</itemPath>
       <itemPath>Firefly.h</itemPath>
-      <itemPath>LLPCommand.h</itemPath>
-      <itemPath>LocationData.h</itemPath>
+      <itemPath>NavigationCommand.h</itemPath>
       <itemPath>RouteStrategy.h</itemPath>
-      <itemPath>Waypoint.h</itemPath>
-      <itemPath>WaypointCommand.h</itemPath>
+      <itemPath>SensorCommand.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -21,11 +19,9 @@
                    projectFiles="true">
       <itemPath>Comport.cpp</itemPath>
       <itemPath>Firefly.cpp</itemPath>
-      <itemPath>LLPCommand.cpp</itemPath>
-      <itemPath>LocationData.cpp</itemPath>
+      <itemPath>NavigationCommand.cpp</itemPath>
       <itemPath>RouteStrategy.cpp</itemPath>
-      <itemPath>Waypoint.cpp</itemPath>
-      <itemPath>WaypointCommand.cpp</itemPath>
+      <itemPath>SensorCommand.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -58,25 +54,17 @@
       </item>
       <item path="Firefly.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="LLPCommand.cpp" ex="false" tool="1" flavor2="0">
+      <item path="NavigationCommand.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="LLPCommand.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="LocationData.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="LocationData.h" ex="false" tool="3" flavor2="0">
+      <item path="NavigationCommand.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RouteStrategy.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RouteStrategy.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Waypoint.cpp" ex="false" tool="1" flavor2="0">
+      <item path="SensorCommand.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Waypoint.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="WaypointCommand.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="WaypointCommand.h" ex="false" tool="3" flavor2="0">
+      <item path="SensorCommand.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -109,25 +97,17 @@
       </item>
       <item path="Firefly.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="LLPCommand.cpp" ex="false" tool="1" flavor2="0">
+      <item path="NavigationCommand.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="LLPCommand.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="LocationData.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="LocationData.h" ex="false" tool="3" flavor2="0">
+      <item path="NavigationCommand.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RouteStrategy.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RouteStrategy.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Waypoint.cpp" ex="false" tool="1" flavor2="0">
+      <item path="SensorCommand.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Waypoint.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="WaypointCommand.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="WaypointCommand.h" ex="false" tool="3" flavor2="0">
+      <item path="SensorCommand.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

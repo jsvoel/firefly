@@ -23,7 +23,7 @@ AS=as
 # Macros
 CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
-CND_CONF=Debug
+CND_CONF=Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -37,11 +37,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Comport.o \
 	${OBJECTDIR}/Firefly.o \
-	${OBJECTDIR}/LLPCommand.o \
-	${OBJECTDIR}/LocationData.o \
+	${OBJECTDIR}/NavigationCommand.o \
 	${OBJECTDIR}/RouteStrategy.o \
-	${OBJECTDIR}/Waypoint.o \
-	${OBJECTDIR}/WaypointCommand.o \
+	${OBJECTDIR}/SensorCommand.o \
 	${OBJECTDIR}/main.o
 
 
@@ -72,42 +70,32 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/firefly: ${OBJECTFILES}
 ${OBJECTDIR}/Comport.o: Comport.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Comport.o Comport.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Comport.o Comport.cpp
 
 ${OBJECTDIR}/Firefly.o: Firefly.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Firefly.o Firefly.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Firefly.o Firefly.cpp
 
-${OBJECTDIR}/LLPCommand.o: LLPCommand.cpp 
+${OBJECTDIR}/NavigationCommand.o: NavigationCommand.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LLPCommand.o LLPCommand.cpp
-
-${OBJECTDIR}/LocationData.o: LocationData.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LocationData.o LocationData.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/NavigationCommand.o NavigationCommand.cpp
 
 ${OBJECTDIR}/RouteStrategy.o: RouteStrategy.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RouteStrategy.o RouteStrategy.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RouteStrategy.o RouteStrategy.cpp
 
-${OBJECTDIR}/Waypoint.o: Waypoint.cpp 
+${OBJECTDIR}/SensorCommand.o: SensorCommand.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Waypoint.o Waypoint.cpp
-
-${OBJECTDIR}/WaypointCommand.o: WaypointCommand.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/WaypointCommand.o WaypointCommand.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SensorCommand.o SensorCommand.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

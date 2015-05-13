@@ -60,7 +60,7 @@ struct GPS_DATA {
 class GPSDataCommand : public SensorCommand {
 public:
 
-    GPSDataCommand() : SensorCommand("GPS Data Request", (char*) &data, sizeof (data), 0x23, 0x080) {
+    GPSDataCommand() : SensorCommand("GPS Data Request", (char*) &data, sizeof (data), 0x23, 0x0080) {
     }
 
     GPS_DATA data;

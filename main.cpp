@@ -14,6 +14,7 @@
  * 
  */
 int main(int argc, char** argv) {
+    try{
     int count = 0;
     GPSDataCommand gps;
     LaunchCommand ln;
@@ -37,18 +38,32 @@ int main(int argc, char** argv) {
         }
     }
     
+    
+    /*
     std::cout << "Launching..." << std::endl;
     ln.execute();
     nanosleep(&reqt, &remt);
     
     std::cout << "Flying 10 x 10 x 10" << std::endl;
     wp.setRelative(10, 10, 10);
+    //wp.setAbsolute(490000000, 80000000, 10);
     wp.execute();
     nanosleep(&reqt, &remt);
     
     std::cout << "Ending..." << std::endl;
     ed.execute();
-    nanosleep(&reqt, &remt);
+    nanosleep(&reqt, &remt); 
+     */
+    }
+    catch(std::runtime_error &e){
+        std::cout << "Runtime error: " << e.what()  << std::endl;
+    }
+    catch(std::exception &e){
+        std::cout << "Esception: " << e.what() << std::endl;
+    }
+    catch(...){
+        std::cout << "Uncaught Exception" << std::endl;
+    }
     
     return 0;
 }
