@@ -12,13 +12,11 @@
 #include <iostream>
 
 #include "RouteStrategy.h"
+#include "NavigationCommand.h"
 #include "Comport.h"
 
-#define MOCKUP // instead of using real data, use mock data for testing the interface
 #define COMPORT "/dev/ttyS3" // the port were the serial is to be opened
-#define BAUDRATE B57600 // the baud rate it shall be set to
-
-struct WAYPOINT;
+#define BAUDRATE 57600 // the baud rate it shall be set to
 
 class Firefly {
 public:
@@ -33,7 +31,6 @@ public:
     void setRouteStrategy(RouteStrategy *rs); // set the RouteStrategy
     void pushWaypoint(WAYPOINT* wp); // put a Waypoint into the List
     
-    //void getLocation(LocationData &data);
     Comport* getComport();
 private:
     Firefly();

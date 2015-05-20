@@ -8,15 +8,14 @@
 #ifndef COMPORT_H
 #define	COMPORT_H
 
-#include <unistd.h> // UNIX standard function definitions
-#include <fcntl.h>  // File control definitions
-#include <termios.h> // POSIX terminal control definitions
+#include <boost/asio/serial_port.hpp>
 #include <time.h>
+#include <string>
+#include <iostream>
 
 class Comport {
 public:
-    Comport(const char* port, speed_t baudrate);
-    Comport(const Comport& orig);
+    Comport(const char* port, int baudrate);
     virtual ~Comport();
     
     bool Open();
@@ -24,9 +23,9 @@ public:
     bool Write(const char* buffer, int size);
     int Read(char* buffer, int size, int timeout, int retrycount);
 private:
-    const char* port_;
-    speed_t baudrate_; // defined by bits/terminos.h
-    int filed_;
+    boost::asio::io_service ioser_;
+    boost::asio::serial_port port_;
+    std::string device_;
 };
 
 #endif	/* COMPORT_H */

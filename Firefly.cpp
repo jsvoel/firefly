@@ -19,13 +19,16 @@ Firefly::Firefly()
     }
 }
 
-
 Firefly::~Firefly() {
 }
 
 Firefly* Firefly::getInstance() {
     if (instance_ == 0) {
-        instance_ = new Firefly();
+        try {
+            instance_ = new Firefly();
+        } catch (boost::system::system_error &e) {
+            std::cerr << "Boost Exception on creating comport!" << std::endl << e.what() << std::endl;
+        }
         if (instance_ == 0) {
             std::cout << "Couldn't create instance of Firefly" << std::endl;
         }
@@ -65,16 +68,3 @@ void Firefly::setRouteStrategy(RouteStrategy *rs) {
 void Firefly::pushWaypoint(WAYPOINT* wp) {
     waypoints_.push_back(wp);
 }
-
-/*
-void Firefly::getLocation(LocationData &data) {
-#ifdef MOCKUP
-    data.latitude = 495222300; // Luisenplatz
-    data.longitude = 83904000;
-    data.height = 1000000; // heigh in milimeter -> 100m
-    data.heading = 105000; // heading in degree * 1000 -> 105*
-#else
-    // actual sensor readings
-#endif
-}
-*/

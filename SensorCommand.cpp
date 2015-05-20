@@ -8,65 +8,56 @@
 #include "SensorCommand.h"
 #include "Firefly.h"
 
-SensorCommand::SensorCommand(const char* description,
-        char* answerbuffer, int answersize, char descriptor, unsigned short packetbit) {
-
+SensorCommand::SensorCommand(const char* description, int answersize, char descriptor, unsigned short packetbit){
     commanddescription_ = description;
-    request_[0] = '>';
-    request_[1] = '*';
-    request_[2] = '>';
-    request_[3] = 'p';
-    request_[4] = (packetbit>>8) & 0xFF;
-    request_[5] = packetbit & 0xFF;
-    answerbuffer_ = answerbuffer;
-    answersize_ = answersize;
+    request_.string[0] = '>';
+    request_.string[1] = '*';
+    request_.string[2] = '>';
+    request_.string[3] = 'p';
+    request_.packets = packetbit;
+    answersize_ = sizeof(POLL_HEADER) + answersize + sizeof(POLL_FOOTER);
+    answerbuffer_ = new char[answersize_];
     descriptor_ = descriptor;
 }
 
 SensorCommand::~SensorCommand() {
+    delete[] answerbuffer_;
 }
 
 void SensorCommand::execute() {
-    std::stringstream ss;
-    int answerbytes = 0;
-    unsigned short packetlength;
-    unsigned short crc;
-    char readbuffer[8];
-    
     Comport* pcom = Firefly::getInstance()->getComport();
-    
-    if (pcom->Write(request_, 6) == false) {
+
+    if (pcom->Write((char*)&request_, 6) == false) {
+        std::stringstream ss;
         ss << "Couldn't write command request of: " << commanddescription_ << std::endl;
         throw std::runtime_error(ss.str());
     }
-    
-    answerbytes = pcom->Read(readbuffer, 8, 10, 10);
-    if(answerbytes != 8) {
-        ss << "Startstring incomplete of: " << commanddescription_ << std::endl;
-        throw std::runtime_error(ss.str());   
-    }
-    
-    packetlength = short((short(readbuffer[3])<<8)|readbuffer[4]);
-    if(readbuffer[5] != descriptor_ || packetlength != answersize_){
-        ss << "Wrong packet descriptor or packet length of: " << commanddescription_ << std::endl;
+
+    if (pcom->Read(answerbuffer_, answersize_, 10, 10) != answersize_) {
+        std::stringstream ss;
+        ss << "Answer incomplete of: " << commanddescription_ << std::endl;
+        ss << (*this);
         throw std::runtime_error(ss.str());
     }
     
-    answerbytes = pcom->Read(answerbuffer_, answersize_, 10, 10);
-    if(answerbytes != answersize_) {
-        ss << "Packet data incomplete of: " << commanddescription_ << std::endl;
+    if(getHeader()->length != (answersize_ - sizeof(POLL_HEADER) - sizeof(POLL_FOOTER))){
+        std::stringstream ss;
+        ss << "Answer length inccorect of: " << commanddescription_ << std::endl;
+        ss << (*this);
         throw std::runtime_error(ss.str());
     }
     
-    answerbytes = pcom->Read(readbuffer, 5, 10, 10);
-    if(answerbytes != 5) {
-        ss << "Endstring incomplete of: " << commanddescription_ << std::endl;
+    if(getHeader()->packet_desc != descriptor_){
+        std::stringstream ss;
+        ss << "Answer descriptor inccorect of: " << commanddescription_ << std::endl;
+        ss << (*this);
         throw std::runtime_error(ss.str());
     }
     
-    crc = short((short(readbuffer[0])<<8)|readbuffer[1]);
-    if(crc != crc16((void*)answerbuffer_, answersize_)){
-        ss << "CRC invalid of: " << commanddescription_ << std::endl;
+    if(getFooter()->crc16 != crc16(getAnswer(),(answersize_ - sizeof(POLL_HEADER) - sizeof(POLL_FOOTER)))){
+        std::stringstream ss;
+        ss << "Answer crc inccorect of: " << commanddescription_ << std::endl;
+        ss << (*this);
         throw std::runtime_error(ss.str());
     }
 }

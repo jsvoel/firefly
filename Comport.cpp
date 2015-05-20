@@ -7,13 +7,10 @@
 
 #include "Comport.h"
 
-Comport::Comport(const char* port, speed_t baudrate) {
-    port_ = port;
-    baudrate_ = baudrate;
-    filed_ = -1;
-}
-
-Comport::Comport(const Comport& orig) {
+Comport::Comport(const char* port, int baudrate)
+: port_(ioser_, port) {
+    port_.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
+    device_ = port;
 }
 
 Comport::~Comport() {
@@ -21,56 +18,49 @@ Comport::~Comport() {
 
 bool Comport::Open() {
     bool ret = false;
-    // Initializing the Serial Port
-    filed_ = open(port_, O_RDWR | O_NOCTTY | O_NDELAY | O_NONBLOCK);
-    if (filed_ != -1) {
-        struct termios port_settings; // structure to store the port settings in
-        cfsetispeed(&port_settings, baudrate_); // set baud rates
-        port_settings.c_cflag = baudrate_ | CS8 | CREAD | CLOCAL;
-        port_settings.c_iflag = IGNPAR;
-        port_settings.c_oflag = 0;
-        port_settings.c_lflag = 0;
-        tcsetattr(filed_, TCSANOW, &port_settings); // apply the settings to the port
-        ret = true;
-    }
+    port_.open(device_);
+    ret = port_.is_open();
     return ret;
 }
 
 void Comport::Close() {
-    close(filed_);
+    port_.close();
 }
 
 bool Comport::Write(const char* buffer, int size) {
     bool ret = false;
-    if (size != 0) {
-        int written = write(filed_, buffer, size);
-        fsync(filed_);
-        if (written == size) {
-            ret = true;
+    int index = 0;
+    try {
+        while (index < size) {
+            index = port_.write_some(boost::asio::buffer(&buffer[index], size - index));
         }
-    } else {
+    } catch (boost::system::system_error &e) {
+        std::cerr << "Boost Exception on write some!" << std::endl << e.what() << std::endl;
+    }
+    if (index == size) {
         ret = true;
     }
     return ret;
 }
 
 int Comport::Read(char* buffer, int size, int timeout, int retrycount) {
-    int remaining = size;
     int index = 0;
     timespec reqt, remt;
 
     reqt.tv_sec = 0;
     reqt.tv_nsec = timeout * 1000 * 1000;
     nanosleep(&reqt, &remt);
-
-    while (remaining > 0 && retrycount > -1) {
-        index = read(filed_, &buffer[index], size - index);
-        remaining -= index;
-        if (remaining > 0 && retrycount > 0) {
-            nanosleep(&reqt, &remt);
-            retrycount--;
+    try {
+        while (index < size && retrycount > -1) {
+            index = port_.read_some(boost::asio::buffer(&buffer[index], size - index));
+            if (index < size) {
+                nanosleep(&reqt, &remt);
+                retrycount--;
+            }
         }
+    } catch (boost::system::system_error &e) {
+        std::cerr << "Boost Exception on read some!" << std::endl << e.what() << std::endl;
     }
-    return remaining;
+    return index;
 }
 

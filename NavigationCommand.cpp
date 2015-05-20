@@ -8,95 +8,92 @@
 #include "Firefly.h"
 #include "NavigationCommand.h"
 
-
 NavigationCommand::NavigationCommand(const char* description, char request, char descriptor) {
     commanddescription_ = description;
-    request_[0] = '>';
-    request_[1] = '*';
-    request_[2] = '>';
-    request_[3] = 'w';
-    request_[4] = request;
+    if (request != 's') {
+        requestsize_ = sizeof (WP_COMMAND);
+    } else {
+        requestsize_ = sizeof (WP_COMMAND) + sizeof (WAYPOINT);
+    }
+    request_ = new char[requestsize_];
+    getCommand()->string[0] = '>';
+    getCommand()->string[1] = '*';
+    getCommand()->string[2] = '>';
+    getCommand()->string[3] = 'w';
+    getCommand()->string[4] = request;
     descriptor_ = descriptor;
 }
 
 NavigationCommand::~NavigationCommand() {
+    delete[] request_;
 }
 
 void NavigationCommand::execute() {
-    std::stringstream ss;
-    int answerbytes = 0;
-    char readbuffer[5];
-
+    WP_ACK ack;
     Comport* pcom = Firefly::getInstance()->getComport();
 
-    if (pcom->Write(request_, 5) == false) {
+    if (pcom->Write(request_, requestsize_) == false) {
+        std::stringstream ss;
         ss << "Couldn't write command request of: " << commanddescription_ << std::endl;
         throw std::runtime_error(ss.str());
     }
 
-    sendWaypoint(pcom);
-
-    answerbytes = pcom->Read(readbuffer, 5, 10, 10);
-    if (answerbytes != 5) {
+    if (pcom->Read((char*) &ack, sizeof (WP_ACK), 10, 10) != sizeof (WP_ACK)) {
+        std::stringstream ss;
         ss << "Acknowledge incomplete of: " << commanddescription_ << std::endl;
         throw std::runtime_error(ss.str());
     }
 
-    if (readbuffer[0] != '>' || readbuffer[1] != 'a' || readbuffer[2] != descriptor_
-            || readbuffer[3] != 'a' || readbuffer[4] != '<') {
+    if (ack.header.startstring[0] != '>' || ack.header.startstring[1] != 'a' ||
+            ack.header.packet_desc != descriptor_ ||
+            ack.footer.stopstring[0] != 'a' || ack.footer.stopstring[1] != '<') {
+        std::stringstream ss;
         ss << "Acknowledge incorrect of: " << commanddescription_ << std::endl;
-        ss.put(readbuffer[0]);
-        ss.put(readbuffer[1]);
-        ss.put(readbuffer[2]);
-        ss.put(readbuffer[3]);
-        ss.put(readbuffer[4]);
-        ss << std::endl;
+        ss << ack.header.startstring[0] << ack.header.startstring[1] << ack.header.packet_desc
+                << ack.footer.stopstring[0] << ack.footer.stopstring[1] << std::endl;
         throw std::runtime_error(ss.str());
     }
 }
 
-WaypointCommand::WaypointCommand() : NavigationCommand("Waypoint Command", 's', 0x24) {
-    wp_.wp_number = 1;
-    wp_.properties = WPPROP_HEIGHTENABLED | WPPROP_AUTOMATICGOTO;
-    wp_.max_speed = 20;
-    wp_.time = 500;
-    wp_.pos_acc = 2500;
-    wp_.X = 0;
-    wp_.Y = 0;
-    wp_.yaw = 0;
-    wp_.height = 10000;
-    
+WaypointCommand::WaypointCommand() : NavigationCommand("Waypoint Command", 's', PD_WAYPOINT) {
+    WAYPOINT* wp = getWP();
+    wp->wp_number = 1;
+    wp->properties = WPPROP_HEIGHTENABLED | WPPROP_AUTOMATICGOTO;
+    wp->max_speed = 20;
+    wp->time = 500;
+    wp->pos_acc = 2500;
+    wp->X = 0;
+    wp->Y = 0;
+    wp->yaw = 0;
+    wp->height = 10000;
+
     checksum();
 }
 
-void WaypointCommand::setAbsolute(int latitude, int longitude, int height){
-    wp_.properties |= WPPROP_ABSCOORDS;
-    wp_.X = longitude;
-    wp_.Y = latitude;
-    wp_.height = height * 1000;
+void WaypointCommand::setAbsolute(int latitude, int longitude, int height) {
+    WAYPOINT* wp = getWP();
+    wp->properties |= WPPROP_ABSCOORDS;
+    wp->X = longitude;
+    wp->Y = latitude;
+    wp->height = height * 1000;
+
     checksum();
 }
 
-void WaypointCommand::setRelative(int X, int Y, int height){
-    wp_.properties &= ~WPPROP_ABSCOORDS;
-    wp_.X = X * 1000;
-    wp_.Y = Y * 1000;
-    wp_.height = height * 1000;
+void WaypointCommand::setRelative(int X, int Y, int height) {
+    WAYPOINT* wp = getWP();
+    wp->properties &= ~WPPROP_ABSCOORDS;
+    wp->X = X * 1000;
+    wp->Y = Y * 1000;
+    wp->height = height * 1000;
+
     checksum();
 }
 
-void WaypointCommand::sendWaypoint(Comport* pcom) {
-    std::stringstream ss;
-    
-    if (pcom->Write((char*)&wp_, sizeof(WAYPOINT)) == false) {
-        ss << "Couldn't write Waypointstructure" << std::endl;
-        throw std::runtime_error(ss.str());
-    }
-}
-
-void WaypointCommand::checksum(){
+void WaypointCommand::checksum() {
     short chk = 0xAAAA;
-    chk += wp_.yaw + wp_.height + wp_.time + wp_.X + wp_.Y + wp_.max_speed;
-    chk += wp_.pos_acc + wp_.properties + wp_.wp_number;
-    wp_.chksum = chk;
+    WAYPOINT* wp = getWP();
+    chk += wp->yaw + wp->height + wp->time + wp->X + wp->Y + wp->max_speed;
+    chk += wp->pos_acc + wp->properties + wp->wp_number;
+    wp->chksum = chk;
 }

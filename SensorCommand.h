@@ -11,19 +11,62 @@
 #include <stdexcept>
 #include <sstream>
 
+#define PD_LLSTATUS 0x02
+#define PD_IMUCALCDATA 0x03
+#define PD_GPSDATA 0x23
+#define RQ_LLSTATUS 0x0001
+#define RQ_IMUCALCDATA 0x0004
+#define RQ_GPSDATA 0x0080
+
+typedef struct _POLL_REQUEST {
+    char string[4]; // always initialize with ">*>p"
+    unsigned short packets;
+} __attribute__((packed)) POLL_REQUEST;
+
+typedef struct _POLL_HEADER {
+    char startstring[3];
+    unsigned short length;
+    unsigned char packet_desc;
+} __attribute__((packed)) POLL_HEADER;
+
+typedef struct _POLL_FOOTER {
+    unsigned short crc16;
+    char stopstring[3];
+} __attribute__((packed)) POLL_FOOTER;
+
 class SensorCommand {
 public:
-    SensorCommand(const char* description, char* answerbuffer, int answersize,
-            char descriptor, unsigned short packetbit);
+    SensorCommand(const char* description, int answersize, char descriptor, unsigned short packetbit);
     virtual ~SensorCommand();
 
     virtual void execute();
+protected:
+
+    char* getAnswer() {
+        return &answerbuffer_[6];
+    }
 private:
     unsigned short crc_update(unsigned short crc, unsigned char data);
     unsigned short crc16(void* data, unsigned short cnt);
 
+    POLL_HEADER* getHeader() {
+        return (POLL_HEADER*)&answerbuffer_[0];
+    }
+
+    POLL_FOOTER* getFooter() {
+        return (POLL_FOOTER*)&answerbuffer_[answersize_ - 5];
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, SensorCommand& sc) {
+        for (int i = 0; i < sc.answersize_; ++i) {
+            os << (int) sc.answerbuffer_[i] << ' ';
+        }
+        os << std::endl;
+        return os;
+    }
+
     const char* commanddescription_;
-    char request_[6];
+    POLL_REQUEST request_;
     char* answerbuffer_;
     int answersize_;
     char descriptor_;
@@ -36,7 +79,7 @@ inline unsigned short SensorCommand::crc_update(unsigned short crc, unsigned cha
             ^ (unsigned char) (data >> 4) ^ ((unsigned short) data << 3));
 }
 
-struct GPS_DATA {
+typedef struct _GPS_DATA {
     //latitude/longitude in deg * 10^7
     int latitude;
     int longitude;
@@ -55,15 +98,99 @@ struct GPS_DATA {
     unsigned int numSV;
     // GPS status information; 0x03 = valid GPS fix
     int status;
-};
+} __attribute__((packed)) GPS_DATA;
 
 class GPSDataCommand : public SensorCommand {
 public:
 
-    GPSDataCommand() : SensorCommand("GPS Data Request", (char*) &data, sizeof (data), 0x23, 0x0080) {
+    GPSDataCommand() : SensorCommand("GPS Data Request", sizeof (GPS_DATA), PD_GPSDATA, RQ_GPSDATA) {
     }
 
-    GPS_DATA data;
+    GPS_DATA* getData() {
+        return (GPS_DATA*) getAnswer();
+    }
+};
+
+typedef struct _IMU_CALCDATA {
+    //angles derived by integration of gyro_outputs, drift compensated by data & !fusion; -90000..+90000 pitch(nick) and roll, 0..360000 yaw; 1000 = 1 & ! degree
+    int angle_nick;
+    int angle_roll;
+    int angle_yaw;
+    //angular velocities, raw values 16 bit but bias free
+    int angvel_nick;
+    int angvel_roll;
+    int angvel_yaw;
+    //acc-sensor outputs, calibrated: -10000..+10000 = -1g..+1g
+    short acc_x_calib;
+    short acc_y_calib;
+    short acc_z_calib;
+    //horizontal / vertical accelerations: -10000..+10000 = -1g..+1g
+    short acc_x;
+    short acc_y;
+    short acc_z;
+    //reference angles derived by accelerations only: -90000..+90000; 1000 = 1 & !degree
+    int acc_angle_nick;
+    int acc_angle_roll;
+    //total acceleration measured (10000 = 1g)
+    int acc_absolute_value;
+    //magnetic field sensors output, offset free and scaled; units not & !determined, as only the direction of the field vector is taken into & ! account
+    int Hx;
+    int Hy;
+    int Hz;
+    //compass reading: angle reference for angle_yaw: 0..360000; 1000 = 1 degree
+    int mag_heading;
+    //pseudo speed measurements: integrated accelerations, pulled towards zero; & !units unknown; used for short-term position stabilization
+    int speed_x;
+    int speed_y;
+    int speed_z;
+    //height in mm (after data fusion)
+    int height;
+    //diff. height in mm/s (after data fusion)
+    int dheight;
+    //diff. height measured by the pressure sensor mm/s
+    int dheight_reference;
+    //height measured by the pressure sensor mm
+    int height_reference;
+} __attribute__((packed)) IMU_CALCDATA;
+
+class IMUDataCommand : public SensorCommand {
+public:
+
+    IMUDataCommand() : SensorCommand("IMU Data Request", sizeof (IMU_CALCDATA), PD_IMUCALCDATA, RQ_IMUCALCDATA) {
+    }
+
+    IMU_CALCDATA* getData() {
+        return (IMU_CALCDATA*) getAnswer();
+    }
+};
+
+typedef struct _LL_STATUS {
+    //battery voltages in mV
+    short battery_voltage_1;
+    short battery_voltage_2;
+    //don't care
+    short status;
+    //Controller cycles per second (should be ?1000)
+    short cpu_load;
+    //don't care
+    char compass_enabled;
+    char chksum_error;
+    char flying;
+    char motors_on;
+    short flightMode;
+    //Time motors are turning
+    short up_time;
+} __attribute__((packed)) LL_STATUS;
+
+class LLStatusCommand : public SensorCommand {
+public:
+
+    LLStatusCommand() : SensorCommand("LL Status Command", sizeof (LL_STATUS), PD_LLSTATUS, RQ_LLSTATUS) {
+    }
+
+    LL_STATUS* getData() {
+        return (LL_STATUS*) getAnswer();
+    }
 };
 
 #endif	/* SENSORCOMMAND_H */
